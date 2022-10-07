@@ -86,3 +86,23 @@ update RealEState
 set OwnerSplitAddress3 = PARSENAME(replace(OwnerAddress, ',', '.'), 1)
 
 select * from RealEState
+
+-- Changing y to yes and n to no for consistency in SoldAsVacant column 
+select distinct(SoldAsVacant), count(SoldAsVacant) from RealEState
+group by SoldAsVacant
+order by 2
+
+select SoldAsVacant,
+	Case when SoldAsVacant = 'Y' then 'Yes'
+		 when SoldAsVacant = 'N' then 'No'
+		 Else SoldAsVacant
+	End
+from RealEState
+
+Update RealEState
+set SoldAsVacant = 
+Case	
+	when SoldAsVacant = 'Y' then 'Yes'
+	when SoldAsVacant = 'N' then 'No'
+	Else SoldAsVacant
+End
