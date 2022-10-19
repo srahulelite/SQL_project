@@ -106,3 +106,30 @@ Case
 	when SoldAsVacant = 'N' then 'No'
 	Else SoldAsVacant
 End
+
+--Remove Duplicates
+with RowNumCTE as(
+select *,
+ROW_NUMBER() over (partition by 
+parcelID, 
+propertyAddress, 
+SalePrice, 
+SaleDate,
+legalReference
+order by
+	uniqueID
+) row_num
+from RealEState
+--order by ParcelID
+)
+--delete from RowNumCTE
+--where row_num > 1
+select * from RowNumCTE where row_num > 1
+
+-- Delete Unused columns
+
+Alter table RealEstate
+Drop Column OwnerAddress, TaxDistrict, PropertyAddress
+
+select * from RealEState
+
